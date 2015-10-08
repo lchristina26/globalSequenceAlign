@@ -27,25 +27,26 @@ def align(a, b, match, mismatch, indel):
 #            print "Score 0,0: ", score[0][0]
         else:
 #            print i
-            G.append([(0,i), (0, i-1), a[i-1], "-"])
+            G.append([(0,i), (0, i-1), b[i-1], "-"])
             score[0][i] = -i
 #            print "Score First Row = ", score[0][i]
     for i in range(len(dnaString) + 1):
         if (i == 0):
             pass #print "Score 0,0: ", score[0][0]
         else:
-            G.append([(i,0), (i-1, 0), "-", b[i-1]])
+            print i
+            G.append([(i,0), (i-1, 0), "-", a[i-1]])
             score[i][0] = -i
 #            print "Score First Col = ", score[i][0]
     first = 0
     second = 0
-    for i in range(len(dnaString2)+1):
-        print i
+    for i in range(len(dnaString)+1):
         if (i != 0):
-            for j in range(len(dnaString)+1):
+            for j in range(len(dnaString2)+1):
+                print i, j
                 if (j != 0):
                     r1 = score[i-1][j-1] + mismatch
-                    if dnaString2[i-1] in dnaString[j-1]:
+                    if dnaString2[j-1] in dnaString[i-1]:
                         r1 = score[i-1][j-1] + match
                     r2 = score[i-1][j] + indel
                     r3 = score[i][j-1] + indel
@@ -53,15 +54,15 @@ def align(a, b, match, mismatch, indel):
                     score[i][j] = max(r1, r2, r3)
                     if score[i][j] == r1:
 #                        print a[j-1], b[i-1]
-                        G.append([(i,j),(i-1,j-1), a[j-1],b[i-1]])
+                        G.append([(i,j),(i-1,j-1), a[i-1],b[j-1]])
                     elif score[i][j] == r2:
 #                        print "a", b[j-1]
-                        G.append([(i,j),(i-1,j), "-",b[i-1]])
+                        G.append([(i,j),(i-1,j), a[i-1],"-"])
                     else:
 #                        print a[i-1]
-                        G.append([(i,j),(i,j-1), a[j-1],"-"])
+                        G.append([(i,j),(i,j-1), "-",b[j-1]])
 
-    print "Optimal Alignment Score = ", score[len(dnaString2)-1][len(dnaString)-1]
+    print "Optimal Alignment Score = ", score[len(dnaString)][len(dnaString2)]
 
 def get_array(x):
     global G
